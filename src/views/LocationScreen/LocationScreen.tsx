@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Text, View, FlatList, StyleSheet } from 'react-native';
 import { FAB, Icon } from 'react-native-elements';
 import { supabase } from '../../supabase';
+import { Location } from "../supabase.types";
 
 const styles = StyleSheet.create({
     container: {
@@ -15,16 +16,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'light-gray',
     },
 });
-
-export interface Location {
-    id: number;
-    name: string;
-    street: string;
-    city: string;
-    zip_code: string;
-    created_at: string;
-    image: string;
-}
 
 export default function LocationScreen({ navigation }) {
     let [data, setData] = useState<Location[]>([]);

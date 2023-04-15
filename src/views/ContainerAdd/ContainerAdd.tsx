@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Image, Text, TextInput } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import DropDownPicker, { ItemType } from 'react-native-dropdown-picker';
 import { supabase } from '../../supabase';
-import { Location } from '../LocationScreen/LocationScreen';
+import { Location } from '../supabase.types';
 import { FAB, Icon } from 'react-native-elements';
 
 export default function ContainerAdd({ navigation }) {
