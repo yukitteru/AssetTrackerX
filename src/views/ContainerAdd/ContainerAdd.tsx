@@ -1,15 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, Image, Text, TextInput } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import DropDownPicker, { ItemType } from 'react-native-dropdown-picker';
 import { supabase } from '../../supabase';
+import { Location } from '../LocationScreen/LocationScreen';
 import { FAB, Icon } from 'react-native-elements';
 
-export default function LocationAdd({ navigation }) {
+export default function ContainerAdd({ navigation }) {
     const [image, setImage] = useState(null);
-    const [locationName, setLocationName] = useState('');
-    const [street, setStreet] = useState('');
-    const [city, setCity] = useState('');
-    const [zip, setZip] = useState('');
+    const [containerName, setContainerName] = useState('');
+    const [containterTags, setContainterTags] = useState('');
+
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [locations, setLocations] = useState<ItemType<number>[]>([]);
+
+    useEffect(() => {
+        supabase
+            .from('location')
+            .select('*')
+            .then(({ data, error }) => {
+                setLocations(
+                    (data as Location[]).map((location) => ({
+                        label: location.name,
+                        value: location.id,
+                    }))
+                );
+            });
+    }, []);
 
     const pickImage = async () => {
         // No permissions request is necessary for launching the image library
@@ -54,11 +72,11 @@ export default function LocationAdd({ navigation }) {
                         padding: 10,
                         width: '100%',
                     }}
-                    onChangeText={setLocationName}
-                    value={locationName}
+                    onChangeText={setContainerName}
+                    value={containerName}
                 />
 
-                <Text>Straße</Text>
+                <Text>Tags</Text>
                 <TextInput
                     style={{
                         height: 30,
@@ -67,12 +85,18 @@ export default function LocationAdd({ navigation }) {
                         padding: 10,
                         width: '100%',
                     }}
-                    onChangeText={setStreet}
-                    value={street}
+                    onChangeText={setContainterTags}
+                    value={containterTags}
                 />
 
-                <Text>Stadt</Text>
-                <TextInput
+                <Text>Location</Text>
+                <DropDownPicker
+                    open={open}
+                    value={value}
+                    items={locations}
+                    setOpen={setOpen}
+                    setValue={setValue}
+                    setItems={setLocations}
                     style={{
                         height: 30,
                         marginVertical: 5,
@@ -80,21 +104,6 @@ export default function LocationAdd({ navigation }) {
                         padding: 10,
                         width: '100%',
                     }}
-                    onChangeText={setCity}
-                    value={city}
-                />
-
-                <Text>PLZ</Text>
-                <TextInput
-                    style={{
-                        height: 30,
-                        marginVertical: 5,
-                        borderWidth: 1,
-                        padding: 10,
-                        width: '100%',
-                    }}
-                    onChangeText={setZip}
-                    value={zip}
                 />
             </View>
             <FAB
@@ -109,16 +118,11 @@ export default function LocationAdd({ navigation }) {
                         tvParallaxProperties={undefined}
                     />
                 }
-                disabled={!locationName}
+                disabled={!containerName || !value}
                 onPress={async () => {
-                    const result = await supabase.from('location').insert({
-                        name: locationName,
-                        city: city,
-                        image: image,
-                        street: street,
-                        zip_code: zip,
-                    });
-                    console.log(result);
+                    const result = await supabase
+                        .from('container')
+                        .insert({ name: containerName, location_id: value, image: image });
                     navigation.goBack();
                 }}
             />

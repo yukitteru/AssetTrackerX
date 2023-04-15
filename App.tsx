@@ -12,29 +12,33 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './src/views/Home/Home';
 import ContainerAdd from './src/views/ContainerAdd/ContainerAdd';
 import LocationAdd from './src/views/LocationAdd/LocationAdd';
+import {registerRootComponent} from 'expo';
 
-const stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 
-export default function App() {
+function App() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
                 <Stack.Screen
                     name="Home"
                     component={Home}
-                    options={{ headerShown: false }}/>
+                    options={{headerShown: false}}
+                />
                 <Stack.Screen
                     name="ContainerAdd"
                     component={ContainerAdd}
-                    options={{ headerTitle: "Добавить контейнер" }}
+                    options={{headerTitle: 'Добавить контейнер'}}
                 />
                 <Stack.Screen
                     name="LocationAdd"
                     component={LocationAdd}
-                    options={{ headerTitle: "Добавить местоположение" }}
+                    options={{headerTitle: 'Добавить локацию'}}
                 />
             </Stack.Navigator>
-            <StatusBar style="auto" />
+            <StatusBar style="auto"/>
         </NavigationContainer>
     );
 }
+
+export default registerRootComponent(App);
