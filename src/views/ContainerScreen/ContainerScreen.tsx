@@ -3,62 +3,72 @@ import { Text, View, FlatList, StyleSheet } from 'react-native';
 import { supabase } from '../../supabase';
 import { FAB } from 'react-native-elements';
 import { Icon } from 'react-native-elements';
-import { Container } from '../supabase.types'
+import { Container } from '../supabase.types';
+import { CompositeScreenProps } from '@react-navigation/native';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { HomeTabParamList } from '../Home/Home';
+import { AppStackParamList } from '../../../App';
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: 10,
-    },
-    item: {
-        padding: 10,
-        fontSize: 18,
-        height: 44,
-        backgroundColor: 'light-gray',
-    },
+  container: {
+    flex: 1,
+    paddingTop: 10,
+  },
+  item: {
+    padding: 10,
+    fontSize: 18,
+    height: 44,
+    backgroundColor: 'light-gray',
+  },
 });
 
-export default function ContainerScreen({ navigation }) {
-    let [data, setData] = useState<Container[]>([]);
+type Props = CompositeScreenProps<
+  BottomTabScreenProps<HomeTabParamList, 'Container'>,
+  NativeStackScreenProps<AppStackParamList>
+>;
 
-    const fetchData = () => {
-        supabase
-            .from('container')
-            .select('*')
-            .then(({ data, error }) => {
-                setData(data as Container[]);
-            });
-    };
+export default function ContainerScreen({ navigation }: Props) {
+  let [data, setData] = useState<Container[]>([]);
 
-    useEffect(() => {
-        fetchData();
-        navigation.addListener('focus', () => {
-            fetchData();
-        });
-    }, []);
+  const fetchData = () => {
+    supabase
+      .from('container')
+      .select('*')
+      .then(({ data, error }) => {
+        setData(data as Container[]);
+      });
+  };
 
-    return (
-        <View style={styles.container}>
-            <FlatList
-                data={data}
-                renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
-            />
-            <FAB
-                title=""
-                color="#32afed"
-                placement="right"
-                icon={
-                    <Icon
-                        name="add"
-                        size={24}
-                        color="white"
-                        tvParallaxProperties={undefined}
-                    />
-                }
-                onPress={() => {
-                    navigation.navigate('ContainerAdd');
-                }}
-            />
-        </View>
-    );
+  useEffect(() => {
+    fetchData();
+    navigation.addListener('focus', () => {
+      fetchData();
+    });
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={data}
+        renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
+      />
+      <FAB
+        title=""
+        color="#32afed"
+        placement="right"
+        icon={
+          <Icon
+            name="add"
+            size={24}
+            color="white"
+            tvParallaxProperties={undefined}
+          />
+        }
+        onPress={() => {
+          navigation.navigate('ContainerAdd');
+        }}
+      />
+    </View>
+  );
 }
