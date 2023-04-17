@@ -7,7 +7,7 @@ import { FAB, Icon } from 'react-native-elements';
 import { Location, fetchLocations, supabase } from '../../supabase';
 import { AppStackParamList } from '../../../App';
 import { HomeTabParamList } from '../Home/Home';
-import { useLocations } from "../../hooks/location";
+import { useLocations } from '../../hooks/location';
 
 type Props = CompositeScreenProps<
   BottomTabScreenProps<HomeTabParamList, 'Locations'>,

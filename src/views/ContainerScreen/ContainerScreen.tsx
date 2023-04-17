@@ -7,7 +7,7 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { HomeTabParamList } from '../Home/Home';
 import { AppStackParamList } from '../../../App';
-import { useContainers } from "../../hooks/container";
+import { useContainers } from '../../hooks/container';
 
 const styles = StyleSheet.create({
   container: {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Image, Text, TextInput } from 'react-native';
-import { useImagePicker } from "../../hooks/image";
+import { useImagePicker } from '../../hooks/image';
 import { insertLocation, supabase } from '../../supabase';
 import { FAB, Icon } from 'react-native-elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
