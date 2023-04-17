@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Text, View, FlatList, StyleSheet } from 'react-native';
 import { FAB } from 'react-native-elements';
 import { Icon } from 'react-native-elements';
-import { Container, fetchContainer, supabase } from '../../supabase';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { HomeTabParamList } from '../Home/Home';
 import { AppStackParamList } from '../../../App';
+import { useContainers } from "../../hooks/container";
 
 const styles = StyleSheet.create({
   container: {
@@ -28,17 +28,9 @@ type Props = CompositeScreenProps<
 >;
 
 export default function ContainerScreen({ navigation }: Props) {
-  let [containers, setContainers] = useState<Container[]>([]);
-
-  const fetchData = () => {
-    fetchContainer().then(setContainers);
-  };
-
+  const { containers, fetch } = useContainers();
   useEffect(() => {
-    fetchData();
-    navigation.addListener('focus', () => {
-      fetchData();
-    });
+    navigation.addListener('focus', fetch);
   }, []);
 
   return (

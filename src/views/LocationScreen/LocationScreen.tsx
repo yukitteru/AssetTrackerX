@@ -1,12 +1,13 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Text, View, FlatList, StyleSheet } from 'react-native';
 import { FAB, Icon } from 'react-native-elements';
 import { Location, fetchLocations, supabase } from '../../supabase';
 import { AppStackParamList } from '../../../App';
 import { HomeTabParamList } from '../Home/Home';
+import { useLocations } from "../../hooks/location";
 
 type Props = CompositeScreenProps<
   BottomTabScreenProps<HomeTabParamList, 'Locations'>,
@@ -27,17 +28,9 @@ const styles = StyleSheet.create({
 });
 
 export default function LocationScreen({ navigation }: Props) {
-  let [locations, setLocations] = useState<Location[]>([]);
-
-  const fetchData = () => {
-    fetchLocations().then(setLocations);
-  };
-
+  const { locations, fetch } = useLocations();
   useEffect(() => {
-    fetchData();
-    navigation.addListener('focus', () => {
-      fetchData();
-    });
+    navigation.addListener('focus', fetch);
   }, []);
 
   return (
