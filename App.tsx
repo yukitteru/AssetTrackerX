@@ -17,6 +17,7 @@ import ContainerAdd from './src/views/ContainerAdd/ContainerAdd';
 import LocationAdd from './src/views/LocationAdd/LocationAdd';
 import { registerRootComponent } from 'expo';
 
+
 export type AppStackParamList = {
   Home: NavigatorScreenParams<HomeTabParamList>;
   ContainerAdd: undefined;
