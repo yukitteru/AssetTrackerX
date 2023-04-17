@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { Text, View, FlatList, StyleSheet } from 'react-native';
 import { FAB, Icon } from 'react-native-elements';
-import { Location, supabase } from '../../supabase';
+import { Location, fetchLocations, supabase } from '../../supabase';
 import { AppStackParamList } from '../../../App';
 import { HomeTabParamList } from '../Home/Home';
 
@@ -27,18 +27,10 @@ const styles = StyleSheet.create({
 });
 
 export default function LocationScreen({ navigation }: Props) {
-  let [data, setData] = useState<Location[]>([]);
+  let [locations, setLocations] = useState<Location[]>([]);
 
   const fetchData = () => {
-    supabase
-      .from('location')
-      .select('*')
-      .then(({ data, error }) => {
-          if(!data) {
-              return;
-          }
-        setData(data);
-      });
+    fetchLocations().then(setLocations);
   };
 
   useEffect(() => {
@@ -51,7 +43,7 @@ export default function LocationScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <FlatList
-        data={data}
+        data={locations}
         renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
       />
       <FAB

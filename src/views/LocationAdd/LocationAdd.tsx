@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Image, Text, TextInput } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { supabase } from '../../supabase';
+import { insertLocation, supabase } from '../../supabase';
 import { FAB, Icon } from 'react-native-elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AppStackParamList } from '../../../App';
@@ -16,7 +16,6 @@ export default function LocationAdd({ navigation }: Props) {
   const [zip, setZip] = useState('');
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result: any = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -29,6 +28,17 @@ export default function LocationAdd({ navigation }: Props) {
     }
   };
 
+  const handleCreateLocation = async () => {
+    await insertLocation({
+      name: locationName,
+      city: city,
+      image: image,
+      street: street,
+      zip_code: zip,
+    });
+
+    navigation.goBack();
+  };
   return (
     <View style={{ alignItems: 'center', flex: 1 }}>
       <TouchableOpacity
@@ -114,17 +124,7 @@ export default function LocationAdd({ navigation }: Props) {
           />
         }
         disabled={!locationName}
-        onPress={async () => {
-          const result = await supabase.from('location').insert({
-            name: locationName,
-            city: city,
-            image: image,
-            street: street,
-            zip_code: zip,
-          });
-          console.log(result);
-          navigation.goBack();
-        }}
+        onPress={handleCreateLocation}
       />
     </View>
   );
