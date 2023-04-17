@@ -5,7 +5,6 @@ import { AppStackParamList } from '../../../App';
 import * as ImagePicker from 'expo-image-picker';
 import DropDownPicker, { ItemType } from 'react-native-dropdown-picker';
 import { supabase } from '../../supabase';
-import { Location } from '../supabase.types';
 import { FAB, Icon } from 'react-native-elements';
 
 type Props = NativeStackScreenProps<AppStackParamList, 'ContainerAdd'>;
@@ -24,12 +23,15 @@ export default function ContainerAdd({ navigation }: Props) {
       .from('location')
       .select('*')
       .then(({ data, error }) => {
+          if(!data) {
+              return;
+          }
         setLocations(
-          (data as Location[]).map((location) => ({
+          (data.map((location) => ({
             label: location.name,
             value: location.id,
           }))
-        );
+        ));
       });
   }, []);
 

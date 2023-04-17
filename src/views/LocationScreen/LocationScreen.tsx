@@ -4,8 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { Text, View, FlatList, StyleSheet } from 'react-native';
 import { FAB, Icon } from 'react-native-elements';
-import { supabase } from '../../supabase';
-import { Location } from '../supabase.types';
+import { Location, supabase } from '../../supabase';
 import { AppStackParamList } from '../../../App';
 import { HomeTabParamList } from '../Home/Home';
 
@@ -35,7 +34,10 @@ export default function LocationScreen({ navigation }: Props) {
       .from('location')
       .select('*')
       .then(({ data, error }) => {
-        setData(data as Location[]);
+          if(!data) {
+              return;
+          }
+        setData(data);
       });
   };
 
